@@ -79,12 +79,25 @@ api-remove-background/
 ## Exemplo de código consumindo a API:
 
 ```bash
+import os
 import requests
 
-# Abra a imagem que você quer enviar (pinscher.png)
-# A imagem deve estar no mesmo diretório desse script que pode ser executado diretamente pelo cmd.
+# Informar o nome da imagem que deseja remover o fundo e o nome que deseja salvar a imagem sem fundo
+ImagemIncial = input("Digite o nome da imagem que deseja remover o fundo (ex: pinscher.png): ")
+if not os.path.splitext(ImagemIncial)[1]:
+    ImagemIncial += ".png"
+if not os.path.isfile(ImagemIncial):
+    print(f"Arquivo '{ImagemIncial}' não encontrado no diretório atual.")
+    exit(1)
 
-with open("pinscher.png", "rb") as f:
+ImagemSemFundo = input("Digite o nome que deseja salvar a imagem sem fundo (ex: pinscher_sem_fundo): ")
+if not ImagemSemFundo.lower().endswith(".png"):
+    ImagemSemFundo += ".png"
+if os.path.isfile(ImagemSemFundo):
+    print(f"Já existe um arquivo chamado '{ImagemSemFundo}' no diretório atual.")
+    exit(1)
+
+with open(ImagemIncial, "rb") as f:
     files = {"file": f}
 
     # Envia para o endpoint da API
@@ -95,9 +108,9 @@ with open("pinscher.png", "rb") as f:
 
 # Salva a imagem com o fundo já removido
 if response.status_code == 200:
-    with open("pinscher_sem_fundo.png", "wb") as out:
+    with open(ImagemSemFundo, "wb") as out:
         out.write(response.content)
-    print("Imagem sem fundo salva como pinscher_sem_fundo.png")
+    print(f"Imagem sem fundo salva como {ImagemSemFundo}")
 else:
     print("Erro:", response.status_code)
 ```
