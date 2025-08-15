@@ -5,8 +5,22 @@ os.environ["NUMBA_DISABLE_CACHE"] = "1"
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import Response
 from .utils import remove_background
+from fastapi.middleware.cors import CORSMiddleware
+
+origins = [
+    "http://localhost:3000",  # React dev
+    "https://seu-front.vercel.app",  # Vercel deploy
+]
 
 app = FastAPI(title="Remove Background API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/remove-background/")
 async def remove_background_endpoint(file: UploadFile = File(...)):
