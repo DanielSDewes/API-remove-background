@@ -7,20 +7,7 @@ from fastapi.responses import Response
 from .utils import remove_background
 from fastapi.middleware.cors import CORSMiddleware
 
-origins = [
-    "http://localhost:3000",  # React dev
-    "https://seu-front.vercel.app",  # Vercel deploy
-]
-
 app = FastAPI(title="Remove Background API")
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 @app.post("/remove-background/")
 async def remove_background_endpoint(file: UploadFile = File(...)):
@@ -30,3 +17,13 @@ async def remove_background_endpoint(file: UploadFile = File(...)):
     image_bytes = await file.read()
     result_bytes = remove_background(image_bytes)
     return Response(content=result_bytes, media_type="image/png")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+    "http://localhost:3000",  
+    "https://remove-bg-steel.vercel.app/"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
