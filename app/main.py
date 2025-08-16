@@ -9,9 +9,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Remove Background API")
 
+# ✅ CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://remove-bg-steel.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
